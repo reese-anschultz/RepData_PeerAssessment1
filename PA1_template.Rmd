@@ -36,7 +36,17 @@ activity_data_per_day<-aggregate(activity_data['steps'],activity_data['date'],FU
 ggplot(data=activity_data_per_day)+geom_histogram(aes(x=date,y=steps),stat="identity")
 ```
 
-3. Calculate and report the mean and median of the total number of steps taken per day
+3. Calculate and report the mean and median of the total number of steps taken per day  
+
+```{r}
+mean_steps<-sapply(activity_data_per_day['steps'],mean,na.rm=TRUE)
+```
+The mean number of steps taken each day is `r format(mean_steps,digits=7,nsmall=2)`.
+
+```{r}
+median_steps<-sapply(activity_data_per_day['steps'],median,na.rm=TRUE)
+```
+The median number of steps taken each day is `r format(median_steps,digits=2,nsmall=2)`.
 
 ## What is the average daily activity pattern?
 
