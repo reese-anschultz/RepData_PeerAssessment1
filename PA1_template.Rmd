@@ -48,6 +48,7 @@ median_steps<-sapply(activity_data_per_day['steps'],median,na.rm=TRUE)
 ```
 The median number of steps taken each day is `r format(median_steps,digits=2,nsmall=2)`.
 
+
 ## What is the average daily activity pattern?
 
 
