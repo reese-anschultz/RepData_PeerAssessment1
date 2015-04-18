@@ -21,8 +21,8 @@ install.packages("gridExtra")
 ```{r,warning=FALSE}
 library(lubridate)
 library(ggplot2)
-library(grid)
-library(gridExtra)
+#library(grid)
+#library(gridExtra)
 
 zip_file<-"activity.zip"
 activity_data_file<-"activity.csv"
@@ -59,7 +59,6 @@ median_steps_per_day<-sapply(activity_data_per_day['steps'],median,na.rm=TRUE)
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r}
 mean_steps_per_interval<-aggregate(steps ~ interval,activity_data,FUN=mean,na.rm=TRUE)
-head(mean_steps_per_interval)
 ggplot(data=mean_steps_per_interval)+geom_line(aes(x=interval,y=steps))
 ```
 
@@ -117,21 +116,6 @@ activity_data$daytype<-merged$daytype
 
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
 ```{r}
-weekend_activity_data<-activity_data[activity_data$daytype=='weekend',]
-weekend_mean_steps_per_interval<-aggregate(weekend_activity_data['steps'],weekend_activity_data['interval'],FUN=mean)
-weekend_plot<-ggplot(data=weekend_mean_steps_per_interval)+
-    expand_limits(y=225)+
-    geom_line(aes(x=interval,y=steps))+
-    ggtitle("weekend")
-
-weekday_activity_data<-activity_data[activity_data$daytype=='weekday',]
-weekday_mean_steps_per_interval<-aggregate(weekday_activity_data['steps'],weekday_activity_data['interval'],FUN=mean)
-weekday_plot<-ggplot(data=weekday_mean_steps_per_interval)+
-    expand_limits(y=225)+
-    geom_line(aes(x=interval,y=steps))+
-    ggtitle("weekday")
-grid.arrange(weekend_plot,weekday_plot)
-
 mean_steps_per_interval<-aggregate(steps ~ daytype+interval,activity_data,FUN=mean,na.rm=TRUE)
 ggplot(mean_steps_per_interval,aes(x=interval,y=steps))+
     geom_line()+
