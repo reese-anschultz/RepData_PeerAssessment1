@@ -41,27 +41,49 @@ ggplot(data=activity_data_per_day)+geom_histogram(aes(x=date,y=steps),stat="iden
 ```{r}
 mean_steps_per_day<-sapply(activity_data_per_day['steps'],mean,na.rm=TRUE)
 ```
-The mean number of steps taken each day is `r format(mean_steps_per_day,digits=7,nsmall=2)`.
+*The mean total number of steps taken per day is `r format(mean_steps_per_day,digits=7,nsmall=2)`.*
 
 ```{r}
 median_steps_per_day<-sapply(activity_data_per_day['steps'],median,na.rm=TRUE)
 ```
-The median number of steps taken each day is `r format(median_steps_per_day,digits=2,nsmall=2)`.
+*The median total number of steps taken per day is `r format(median_steps_per_day,digits=2,nsmall=2)`.*
 
 
 ## What is the average daily activity pattern?
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r}
-mean_steps_per_interval<-aggregate(activity_data['steps'],activity_data['interval'],FUN=sum,na.rm=TRUE)
+mean_steps_per_interval<-aggregate(activity_data['steps'],activity_data['interval'],FUN=mean,na.rm=TRUE)
 ggplot(data=mean_steps_per_interval)+geom_line(aes(x=interval,y=steps))
 ```
 
-2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
-
-The interval with the maximum number of steps, on average, is `r mean_steps_per_interval[which.max(mean_steps_per_interval$steps),"interval"]`.
+2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?  
+*The interval with the maximum number of steps, on average, is `r mean_steps_per_interval[which.max(mean_steps_per_interval$steps),"interval"]`.*
 
 ## Imputing missing values
+1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+```{r}
+number_of_missing_steps<-sum(is.na(activity_data[,'steps']))
+```
+*`r number_of_missing_steps` rows are missing steps.*
 
+2. Devise a strategy for filling in all of the missing values in the dataset. The strategy does not need to be sophisticated. For example, you could use the mean/median for that day, or the mean for that 5-minute interval, etc.
 
+*Missing values will be replaced with the mean of that variable for the same interval.*
+
+3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+```{r}
+activity_data_na_indices<-which(is.na(activity_data[,'steps']))
+intervals<-data.frame(interval=activity_data[activity_data_na_indices,'interval'])
+merged<-merge(x=intervals,y=mean_steps_per_interval)
+activity_data[activity_data_na_indices,'steps']<-merged[,'steps']
+```
+
+4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+```{r,warning=FALSE}
+activity_data_per_day<-aggregate(activity_data['steps'],activity_data['date'],FUN=sum)
+ggplot(data=activity_data_per_day)+geom_histogram(aes(x=date,y=steps),stat="identity")
+```
+
+*Yes, many of the estimates have increased.*
 
 ## Are there differences in activity patterns between weekdays and weekends?
