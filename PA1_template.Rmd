@@ -1,6 +1,6 @@
 ```{r,echo=FALSE,results='hide',warning=FALSE}
 # Make sure the working directory is set correctly
-setwd("C:/Users/Reese Anschultz/eda-ProgrammingAssignment2")
+setwd("C:/Users/Reese Anschultz/RepData_PeerAssessment1")
 ```
 ---
 title: "Reproducible Research: Peer Assessment 1"
@@ -9,20 +9,26 @@ output:
     keep_md: true
 ---
 
-If you haven't done so already, install ggplot2 using:
+If you haven't done so already, install lubridate, ggplot2, grid and gridExtra packages using:
 ```
+install.packages("lubridate")
 install.packages("ggplot2")
+install.packages("grid")
+install.packages("gridExtra")
 ```
 
 ## Loading and preprocessing the data
 ```{r,warning=FALSE}
+library(lubridate)
 library(ggplot2)
+library(grid)
+library(gridExtra)
 
 zip_file<-"activity.zip"
 activity_data_file<-"activity.csv"
 unzip(zip_file,junkpaths=TRUE)
 activity_data<-read.csv(activity_data_file,header=TRUE,na.strings="NA")
-activity_data$date<-as.Date(activity_data$date)
+activity_data$date<-as.Date(ymd(activity_data$date))
 ```
 
 ## What is mean total number of steps taken per day?
@@ -52,7 +58,8 @@ median_steps_per_day<-sapply(activity_data_per_day['steps'],median,na.rm=TRUE)
 ## What is the average daily activity pattern?
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r}
-mean_steps_per_interval<-aggregate(activity_data['steps'],activity_data['interval'],FUN=mean,na.rm=TRUE)
+mean_steps_per_interval<-aggregate(steps ~ interval,activity_data,FUN=mean,na.rm=TRUE)
+head(mean_steps_per_interval)
 ggplot(data=mean_steps_per_interval)+geom_line(aes(x=interval,y=steps))
 ```
 
@@ -84,6 +91,49 @@ activity_data_per_day<-aggregate(activity_data['steps'],activity_data['date'],FU
 ggplot(data=activity_data_per_day)+geom_histogram(aes(x=date,y=steps),stat="identity")
 ```
 
-*Yes, many of the estimates have increased.*
+```{r}
+mean_steps_per_day<-sapply(activity_data_per_day['steps'],mean,na.rm=TRUE)
+```
+*The mean total number of steps taken per day is `r format(mean_steps_per_day,digits=7,nsmall=2)`.*
+
+```{r}
+median_steps_per_day<-sapply(activity_data_per_day['steps'],median,na.rm=TRUE)
+```
+
+*The median total number of steps taken per day is `r format(median_steps_per_day,digits=2,nsmall=2)`.*
+
+*Yes, many of the estimates have increased although the mean has remained the same (since the mean was used to populate the values.)*
 
 ## Are there differences in activity patterns between weekdays and weekends?
+1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+```{r}
+# Make a map to convert wday to a day type (weekend or weekday)
+map_of_wday_to_daytype<-data.frame(wday=c(1:7),daytype=c('weekend',rep('weekday',5),'weekend'))
+map_of_wday_to_daytype$daytype<-factor(map_of_wday_to_daytype$daytype)
+# Convert the current dates to day types and add them to the data
+merged<-merge(x=list(wday=wday(activity_data$date)),y=map_of_wday_to_daytype)
+activity_data$daytype<-merged$daytype
+```
+
+2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). See the README file in the GitHub repository to see an example of what this plot should look like using simulated data.
+```{r}
+weekend_activity_data<-activity_data[activity_data$daytype=='weekend',]
+weekend_mean_steps_per_interval<-aggregate(weekend_activity_data['steps'],weekend_activity_data['interval'],FUN=mean)
+weekend_plot<-ggplot(data=weekend_mean_steps_per_interval)+
+    expand_limits(y=225)+
+    geom_line(aes(x=interval,y=steps))+
+    ggtitle("weekend")
+
+weekday_activity_data<-activity_data[activity_data$daytype=='weekday',]
+weekday_mean_steps_per_interval<-aggregate(weekday_activity_data['steps'],weekday_activity_data['interval'],FUN=mean)
+weekday_plot<-ggplot(data=weekday_mean_steps_per_interval)+
+    expand_limits(y=225)+
+    geom_line(aes(x=interval,y=steps))+
+    ggtitle("weekday")
+grid.arrange(weekend_plot,weekday_plot)
+
+mean_steps_per_interval<-aggregate(steps ~ daytype+interval,activity_data,FUN=mean,na.rm=TRUE)
+ggplot(mean_steps_per_interval,aes(x=interval,y=steps))+
+    geom_line()+
+    facet_grid(daytype ~ .)
+```
