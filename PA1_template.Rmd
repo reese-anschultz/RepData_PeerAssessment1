@@ -15,7 +15,7 @@ install.packages("ggplot2")
 ```
 
 ## Loading and preprocessing the data
-```{r}
+```{r,warning=FALSE}
 library(ggplot2)
 
 zip_file<-"activity.zip"
@@ -39,19 +39,26 @@ ggplot(data=activity_data_per_day)+geom_histogram(aes(x=date,y=steps),stat="iden
 3. Calculate and report the mean and median of the total number of steps taken per day  
 
 ```{r}
-mean_steps<-sapply(activity_data_per_day['steps'],mean,na.rm=TRUE)
+mean_steps_per_day<-sapply(activity_data_per_day['steps'],mean,na.rm=TRUE)
 ```
-The mean number of steps taken each day is `r format(mean_steps,digits=7,nsmall=2)`.
+The mean number of steps taken each day is `r format(mean_steps_per_day,digits=7,nsmall=2)`.
 
 ```{r}
-median_steps<-sapply(activity_data_per_day['steps'],median,na.rm=TRUE)
+median_steps_per_day<-sapply(activity_data_per_day['steps'],median,na.rm=TRUE)
 ```
-The median number of steps taken each day is `r format(median_steps,digits=2,nsmall=2)`.
+The median number of steps taken each day is `r format(median_steps_per_day,digits=2,nsmall=2)`.
 
 
 ## What is the average daily activity pattern?
+1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+```{r}
+mean_steps_per_interval<-aggregate(activity_data['steps'],activity_data['interval'],FUN=sum,na.rm=TRUE)
+ggplot(data=mean_steps_per_interval)+geom_line(aes(x=interval,y=steps))
+```
 
+2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
+The interval with the maximum number of steps, on average, is `r mean_steps_per_interval[which.max(mean_steps_per_interval$steps),"interval"]`.
 
 ## Imputing missing values
 
