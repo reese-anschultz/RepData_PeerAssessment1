@@ -1,6 +1,6 @@
-```{r,echo=FALSE,results='hide',warning=FALSE}
+l```{r,echo=FALSE,results='hide',warning=FALSE}
 # Make sure the working directory is set correctly
-setwd("C:/Users/Reese Anschultz/RepData_PeerAssessment1")
+# setwd("C:/Users/Reese Anschultz/RepData_PeerAssessment1")
 ```
 ---
 title: "Reproducible Research: Peer Assessment 1"
