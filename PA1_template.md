@@ -1,7 +1,4 @@
-l```{r,echo=FALSE,results='hide',warning=FALSE}
-# Make sure the working directory is set correctly
-# setwd("C:/Users/Reese Anschultz/RepData_PeerAssessment1")
-```
+
 ---
 title: "Reproducible Research: Peer Assessment 1"
 output: 
@@ -41,7 +38,7 @@ activity_data_per_day<-aggregate(activity_data['steps'],activity_data['date'],FU
 ggplot(data=activity_data_per_day)+geom_histogram(aes(x=date,y=steps),stat="identity")
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
 
 3. Calculate and report the mean and median of the total number of steps taken per day  
 
@@ -66,7 +63,7 @@ mean_steps_per_interval<-aggregate(steps ~ interval,activity_data,FUN=mean,na.rm
 ggplot(data=mean_steps_per_interval)+geom_line(aes(x=interval,y=steps))
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
+![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
 
 2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?  
 *The interval with the maximum number of steps, on average, is 835.*
@@ -99,7 +96,7 @@ activity_data_per_day<-aggregate(activity_data['steps'],activity_data['date'],FU
 ggplot(data=activity_data_per_day)+geom_histogram(aes(x=date,y=steps),stat="identity")
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
 
 
 ```r
@@ -137,4 +134,4 @@ ggplot(mean_steps_per_interval,aes(x=interval,y=steps))+
     facet_grid(daytype ~ .)
 ```
 
-![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13-1.png) 
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14-1.png) 

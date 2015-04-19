@@ -1,4 +1,4 @@
-l```{r,echo=FALSE,results='hide',warning=FALSE}
+```{r,echo=FALSE,results='hide',warning=FALSE}
 # Make sure the working directory is set correctly
 # setwd("C:/Users/Reese Anschultz/RepData_PeerAssessment1")
 ```
