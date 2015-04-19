@@ -1,13 +1,14 @@
-```{r,echo=FALSE,results='hide',warning=FALSE}
-# Make sure the working directory is set correctly
-# setwd("C:/Users/Reese Anschultz/RepData_PeerAssessment1")
-```
 ---
 title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
     keep_md: true
 ---
+
+```{r,echo=FALSE,results='hide',warning=FALSE}
+# Make sure the working directory is set correctly
+# setwd("C:/Users/Reese Anschultz/RepData_PeerAssessment1")
+```
 
 If you haven't done so already, install lubridate, ggplot2, grid and gridExtra packages using:
 ```
