@@ -13,16 +13,12 @@ If you haven't done so already, install lubridate, ggplot2, grid and gridExtra p
 ```
 install.packages("lubridate")
 install.packages("ggplot2")
-install.packages("grid")
-install.packages("gridExtra")
 ```
 
 ## Loading and preprocessing the data
 ```{r,warning=FALSE}
 library(lubridate)
 library(ggplot2)
-#library(grid)
-#library(gridExtra)
 
 zip_file<-"activity.zip"
 activity_data_file<-"activity.csv"
